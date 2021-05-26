@@ -1,0 +1,13 @@
+{
+    "name": "filebot-web-server",
+    "version": "1.0.0",
+    "description": "Filebot Web Server",
+    "author": "Andy Attebery <me@andyattebery.com",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": {
+      "express": "^4.17.1"
+    }
+  }
