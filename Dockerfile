@@ -25,6 +25,7 @@ FROM node:16-alpine$ALPINE_VERSION
 ARG PUID=1000
 ARG PGID=1000
 ARG PORT=8080
+ARG FILEBOT_DOWNLOADS_DIR=/downloads
 ARG FILEBOT_OUTPUT_DIR=/storage
 ARG FILEBOT_LOGS_DIR=/logs
 
@@ -81,7 +82,7 @@ RUN npm install
 COPY . .
 
 # Configure image
-VOLUME /data /config /storage /downloads /logs
+VOLUME /data /config $FILEBOT_DOWNLOADS_DIR $FILEBOT_OUTPUT_DIR $FILEBOT_LOGS_DIR
 EXPOSE $PORT
 
 # Start
