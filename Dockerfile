@@ -52,9 +52,9 @@ RUN apk add --update --no-cache \
         unrar
 
 # Install Filebot
-ENV FILEBOT_VERSION 4.9.3
+ENV FILEBOT_VERSION 4.9.5
 ENV FILEBOT_URL https://get.filebot.net/filebot/FileBot_$FILEBOT_VERSION/FileBot_$FILEBOT_VERSION-portable.tar.xz
-ENV FILEBOT_SHA256 4fecbc93be7bfea14254e09cfd235cedaf8a9b2b1c3e5a30b9b35063332bf236
+ENV FILEBOT_SHA256 2cdbdf02e78331dd9379d2ba6ea9cd1be27fe188616e651c6bd8b2524a143641
 ENV FILEBOT_HOME /opt/filebot
 RUN set -eux \
  ## * fetch portable package
