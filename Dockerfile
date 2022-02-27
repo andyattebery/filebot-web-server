@@ -1,4 +1,26 @@
-FROM node:16-alpine
+ARG ALPINE_VERSION=3.15
+
+FROM alpine:$ALPINE_VERSION AS build
+
+RUN apk add --update --no-cache \
+    alpine-sdk \
+    git
+
+RUN abuild-keygen -a -n \
+    && cp -v /root/.abuild/*.rsa.pub /etc/apk/keys \
+    && mkdir aports \
+    && cd aports \
+    && git init \
+    && git remote --verbose add origin git://git.alpinelinux.org/aports \
+    && git config core.sparsecheckout true \
+    && git sparse-checkout init \
+    && git sparse-checkout set non-free/unrar \
+    && git pull --verbose origin 3.15-stable \
+    && cd non-free/unrar \
+    && abuild -F checksum \
+    && abuild -F -r -v
+
+FROM node:16-alpine$ALPINE_VERSION
 
 ARG PUID=1000
 ARG PGID=1000
@@ -16,9 +38,14 @@ RUN deluser --remove-home node && \
     addgroup -S node -g $PGID && \
     adduser -S -G node -u $PUID node
 
+# Copy build key and apks built in build step
+COPY --from=build /root/packages /packages/
+COPY --from=build /root/.abuild/*.rsa.pub /etc/apk/keys/
+
 # Install dependencies
-RUN apk add --update --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-        openjdk16 \
+RUN apk add --update --no-cache \
+    --repository /packages/non-free \
+        openjdk16-jre \
         mediainfo \
         chromaprint \
         p7zip \
